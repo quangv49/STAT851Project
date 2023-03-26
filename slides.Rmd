@@ -1,0 +1,42 @@
+---
+title: "STAT 851 Project - Firth's method for bias reduction of MLEs"
+author: "Quang Vuong, Nadia Enhaili"
+date: "26/03/2023"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Outline
+
+\begin{enumerate}
+\item Motivation
+\item Firth's method - general case
+\item Basic examples
+\item Firth's method - GLM case
+\item Real data example
+\end{enumerate}
+
+## Motivation
+
+- MLEs are consistent and asymptotically unbiased, but there is still a shrinking bias term.
+
+- 1D case:
+
+\[U(\hat\theta) = U(\theta) + U'(c(\hat\theta))(\hat\theta - \theta)\]
+\[\Rightarrow \mathbb E U'(c(\hat\theta))(\hat\theta - \theta) = 0.\]
+
+- If \(U'\) is not constant, then \(\hat\theta\) is certainly biased.
+
+## Motivation
+
+- The first term in the bias of \(\hat\theta\) has been studied.
+
+\[\mathbb E(\hat{\theta}^r - \theta^r) = -\frac{\kappa^{r,s}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu})}{2n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right).\]
+
+## Motivation
+
+Derivation goes here.
+
