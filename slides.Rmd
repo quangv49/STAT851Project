@@ -55,15 +55,45 @@ Predictor values \(x_i\) are predetermined, while \(Y_i\) is repeatedly simulate
 
 ## Motivation
 
-\begin{figure}[!h]
-\includegraphics[scale=0.5]{b0_simul.png}
-\end{figure}
+```{r, warning = FALSE}
+set.seed(20230320)
+
+b0 <- 8
+b1 <- 5
+n <- 10
+x <- runif(n, -10, 10)
+
+trials <- 10000
+# First row is b0, second row is b1, third row is dispersion (1/nu)
+estims <- matrix(double(trials*3), nrow = 3)
+
+for (i in 1:trials) {
+  y <- rexp(n, rate = exp(-(b0 + b1*x)))
+  mod <- glm(y ~ x, family = Gamma(link = "log"))
+  estims[c(1,2),i] <- mod$coefficients
+  estims[3,i] <- summary(mod)$dispersion
+}
+
+hist(estims[1,], main = "Empirical distribution of beta0 hat",
+     xlab = "beta0 hat")
+abline(v = b0, col = "blue", lwd = 3)
+abline(v = mean(estims[1,]), col = "darkgreen", lwd = 3)
+legend("topleft", legend = c("True b0", "Empirical mean"),
+       col = c("blue", "darkgreen"), lwd = c(3,3))
+```
+
 
 ## Motivation
 
-\begin{figure}[!h]
-\includegraphics[scale=0.5]{b1_simul.png}
-\end{figure}
+```{r}
+hist(estims[2,], main = "Empirical distribution of beta1 hat",
+     xlab = "beta1 hat")
+abline(v = b1, col = "blue", lwd = 3)
+abline(v = mean(estims[2,]), col = "darkgreen", lwd = 3)
+legend("topleft", legend = c("True b1", "Empirical mean"),
+       col = c("blue", "darkgreen"), lwd = c(3,3))
+```
+
 
 ## Firth's method
 
@@ -103,3 +133,46 @@ or
 \[A^{(E)}(\theta) = -\frac{1}{n}\mathcal I(\theta)b_1(\theta).\]
 
 - The first one leads to more efficient (i.e. less variance) estimators.
+
+- If the model uses an exponential family and \(\theta\) is the canonical parameter, then \(A^{(O)} = A^{(E)}\).
+
+## Basic example
+
+Let \(Y_1,...,Y_n \sim Exp(\lambda)\). Use Firth's method to reduce the bias of the MLE of \(\lambda\).
+
+- We have \(l(\lambda) = n\log \lambda - \lambda\sum_{i=1}^n Y_i\), so:
+\[U(\lambda) = \frac{n}{\lambda} - \sum_{i=1}^n Y_i.\]
+
+- We can compute \(A^{(O)}(\lambda) = A^{(E)}(\lambda) = -\frac{1}{\lambda}\) (see work on board).
+
+- Then
+\[U^*(\lambda) = \frac{n-1}{\lambda} - \sum_{i=1}^n Y_i\]
+and
+\[\lambda^* = \frac{n-1}{\sum_{i=1}^n Y_i}.\]
+
+## Basic example
+
+```{r}
+set.seed(20230328)
+
+trials <- 10000
+n <- 50
+lambda <- 7
+
+mle <- double(trials)
+firth <- double(trials)
+
+for (i in 1:trials) {
+  y <- rexp(n, lambda)
+  mle[i] <- 1/mean(y)
+  firth[i] <- (n-1)/sum(y)
+}
+
+hist(firth, col = rgb(red = 0, green = 0, blue = 1, alpha = 0.5))
+hist(mle, add = T, col = rgb(red = 0, green = 1, blue = 0, alpha = 0.5))
+abline(v=mean(mle), col = "green", lwd = 2)
+abline(v=mean(firth), col = "blue", lwd = 2)
+abline(v=lambda, col = "red", lwd = 2)
+legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
+```
+
