@@ -37,14 +37,18 @@ Common method for estimating parameters in many statistical models, including li
 
 ## Motivation
 
-- MLEs are consistent and asymptotically unbiased, but there is still a shrinking bias term.
+MLEs are consistent and asymptotically unbiased, but there is still a shrinking bias term.
 
-- 1D case:
+&nbsp;
+
+1D case:
 
 \[U(\hat\theta) = U(\theta) + U'(c(\hat\theta))(\hat\theta - \theta)\]
 \[\Rightarrow \mathbb E U'(c(\hat\theta))(\hat\theta - \theta) = 0.\]
 
-- If \(U'\) is not constant, then \(\hat\theta\) is certainly biased.
+&nbsp;
+
+If \(U'\) is not constant, then \(\hat\theta\) is certainly biased.
 
 ## Notation
 
@@ -58,7 +62,7 @@ Common method for estimating parameters in many statistical models, including li
 
 ## Motivation
 
-- The first term in the bias of \(\hat\theta\) has been studied.
+The first term in the bias of \(\hat\theta\) has been studied.
 
 \begin{equation*}
 \begin{aligned}
@@ -120,17 +124,19 @@ legend("topleft", legend = c("True b1", "Empirical mean"),
 
 ## Firth's method for bias reduction
 
-- Reduce the bias by using an adjusted score function
+Reduce the bias by using an adjusted score function:
 
 \[U^*(\theta) = U(\theta) + A(\theta)\]  
 
 \[A: \Omega \to \mathbb R^p\]  
 
-- Root is \(\theta^*\)
+&nbsp;
+
+Root is \(\theta^*\).
 
 ## Firth's method for bias reduction
 
-- One can derive the bias of \(\theta^*\) when estimating \(\theta\)
+One can derive the bias of \(\theta^*\) when estimating \(\theta\):
 
 \begin{equation*}
 \begin{aligned}
@@ -141,7 +147,7 @@ legend("topleft", legend = c("True b1", "Empirical mean"),
 
 ## Firth's method for bias reduction
 
-- Suppose that:
+Suppose that:
 
 \begin{equation*}
 \begin{aligned}
@@ -151,19 +157,23 @@ legend("topleft", legend = c("True b1", "Empirical mean"),
 \end{aligned}
 \end{equation*}
 
-- Then the first term of the bias is gone.
+Then the first term of the bias is gone.
 
 ## Firth's method for bias reduction
 
-- Firth (1993) suggests
+Firth (1993) suggests
 
 \[A^{(O)}(\theta) = -\frac{1}{n}I(\theta)b_1(\theta),\]
 or
 \[A^{(E)}(\theta) = -\frac{1}{n}\mathcal I(\theta)b_1(\theta).\]
 
-- The first one leads to more efficient (i.e. less variance) estimators.
+&nbsp;
 
-- If the model uses an exponential family and \(\theta\) is the canonical parameter, then \(A^{(O)} = A^{(E)}\).
+The first one leads to more efficient (i.e. less variance) estimators.
+
+&nbsp;
+
+If the model uses an exponential family and \(\theta\) is the canonical parameter, then \(A^{(O)} = A^{(E)}\).
 
 ## Example - exponential distribution
 
@@ -185,52 +195,35 @@ and
 # show how bias of both estimators vary with sample size
 set.seed(20230328)
 
-trials <- 10000
-n <- 50
+trials <- 100000
+n.test <- seq(10,100,by=10)
 lambda <- 7
 
-mle <- double(trials)
-firth <- double(trials)
+mle.abs.bias <- double(length(n.test))
+firth.abs.bias <- double(length(n.test))
 
-for (i in 1:trials) {
-  y <- rexp(n, lambda)
-  mle[i] <- 1/mean(y)
-  firth[i] <- (n-1)/sum(y)
+for (n in n.test) {
+  mle <- double(trials)
+  firth <- double(trials)
+  for (i in 1:trials) {
+    y <- rexp(n, lambda)
+    mle[i] <- 1/mean(y)
+    firth[i] <- (n-1)/sum(y)
+  }
+  mle.abs.bias[which(n.test == n)] <- abs(mean(mle) - lambda)
+  firth.abs.bias[which(n.test == n)] <- abs(mean(firth) - lambda)
 }
 
-hist(firth, col = rgb(red = 0, green = 0, blue = 1, alpha = 0.5))
-hist(mle, add = T, col = rgb(red = 0, green = 1, blue = 0, alpha = 0.5))
-abline(v=mean(mle), col = "green", lwd = 2)
-abline(v=mean(firth), col = "blue", lwd = 2)
-abline(v=lambda, col = "red", lwd = 2)
-legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
-```
+# hist(firth, col = rgb(red = 0, green = 0, blue = 1, alpha = 0.5))
+# hist(mle, add = T, col = rgb(red = 0, green = 1, blue = 0, alpha = 0.5))
+# abline(v=mean(mle), col = "green", lwd = 2)
+# abline(v=mean(firth), col = "blue", lwd = 2)
+# abline(v=lambda, col = "red", lwd = 2)
+# legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
 
-## Basic example
-
-```{r}
-# show how bias of both estimators vary with sample size
-set.seed(20230328)
-
-trials <- 10000
-n <- 100
-lambda <- 7
-
-mle <- double(trials)
-firth <- double(trials)
-
-for (i in 1:trials) {
-  y <- rexp(n, lambda)
-  mle[i] <- 1/mean(y)
-  firth[i] <- (n-1)/sum(y)
-}
-
-hist(firth, col = rgb(red = 0, green = 0, blue = 1, alpha = 0.5))
-hist(mle, add = T, col = rgb(red = 0, green = 1, blue = 0, alpha = 0.5))
-abline(v=mean(mle), col = "green", lwd = 2)
-abline(v=mean(firth), col = "blue", lwd = 2)
-abline(v=lambda, col = "red", lwd = 2)
-legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
+plot(n.test, mle.abs.bias, xlab = "n", ylab = "Absolute bias", main = "Bias of MLE and Firth's bias-reduced estimator against sample size", pch = 16, ylim = c(0, max(mle.abs.bias) + 0.1))
+points(n.test, firth.abs.bias)
+legend("topright", legend = c("MLE", "Firth"), col = c("black", "black"), pch = c(16,1))
 ```
 
 ## Application - Firth's method in logistic regression
@@ -290,7 +283,15 @@ $\phi^{(j+1)} \leftarrow \phi^{(j)} + \{ i_{\phi \phi}^{(j)}\}^{-1} s_\phi^{(j)}
 
 ## Conclusion
 
-...
+Firth's method can be used to reduce the bias of MLEs.
+
+&nbsp;
+
+It can be readily implemented for GLMs and there exist packages which do this.
+
+&nbsp;
+
+Bias is not the only consideration when evaluating estimators.
 
 # Questions?
 
