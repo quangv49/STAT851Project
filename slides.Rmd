@@ -213,3 +213,19 @@ We then store the coefficients for each model, and repeat this experiment *n* ti
 ## Application (cont'd) *n = 100*
 
 ![Figure 2](Rplot02.png)
+
+## Firth for GLM's in literature
+
+Kosmidis, I., Kenne Pagui, E. C., & Sartori, N. (2020). **Mean and median bias reduction in generalized linear models.**  
+
+&nbsp;
+
+GLMs with exponential family distributions with dispersion parameter $\varphi$ and coefficients $\beta$.  
+
+&nbsp;
+
+Section 2.3 proposes an algorithm to solve Firth's modified score equations:  
+&nbsp; 
+
+$\beta^{(j+1)} \leftarrow \beta^{(j)} + \{ i_{\beta \beta}^{(j)}\}^{-1} s_\beta^{(j)} - b_\beta^{(j)}$  
+$\phi^{(j+1)} \leftarrow \phi^{(j)} + \{ i_{\phi \phi}^{(j)}\}^{-1} s_\phi^{(j)} - b_\phi^{(j)}$
