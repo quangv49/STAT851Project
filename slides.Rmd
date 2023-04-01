@@ -42,13 +42,15 @@ Common method for estimating parameters in many statistical models, including li
 
 - If \(U'\) is not constant, then \(\hat\theta\) is certainly biased.
 
-## Motivation
+## Notation
 
-- Notation:
 \[\theta = \begin{pmatrix} \theta^1 \\ \vdots \\ \theta^p \end{pmatrix} \in \Omega\]
-\[U_r(\theta) = \frac{\partial l(\theta)}{\partial \theta^r}, U_{rs}(\theta) = \frac{\partial^2 l(\theta)}{\partial \theta^r \partial \theta^s}\]
-\[\kappa_{r,s} = \frac{1}{n}\mathbb E U_rU_s, \kappa_{rs} = \frac{1}{n}\mathbb E U_{rs}\]
-\[\kappa_{r,s,t} = \frac{1}{n}\mathbb E U_rU_sU_t, \kappa_{r,st} = \frac{1}{n}\mathbb E U_rU_{st}\]
+
+\[U_r(\theta) = \frac{\partial l(\theta)}{\partial \theta^r} \quad \quad U_{rs}(\theta) = \frac{\partial^2 l(\theta)}{\partial \theta^r \partial \theta^s}\]
+
+\[\kappa_{r,s} = \frac{1}{n}\mathbb E U_rU_s \quad \quad \kappa_{rs} = \frac{1}{n}\mathbb E U_{rs}\]  
+
+\[\kappa_{r,s,t} = \frac{1}{n}\mathbb E U_rU_sU_t \quad \quad \kappa_{r,st} = \frac{1}{n}\mathbb E U_rU_{st}\]
 
 ## Motivation
 
