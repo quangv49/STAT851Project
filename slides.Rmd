@@ -12,11 +12,15 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Outline
 
 \begin{enumerate}
+\item Refresher
 \item Motivation
-\item Firth's method - general case
-\item Basic example
-\item Firth's method - GLM case
-\item Real data example
+\item Case study
+\item Firth's method for bias reduction
+\item Example - exponential distribution
+\item Application - Firth's method in logistic regression
+\item Firth for GLM's in literature
+\item Conclusion
+\item Questions?
 \end{enumerate}
 
 ## Refresher
@@ -56,12 +60,12 @@ Common method for estimating parameters in many statistical models, including li
 
 - The first term in the bias of \(\hat\theta\) has been studied.
 
-$$
-\begin{align*}
+\begin{equation*}
+\begin{aligned}
 \mathbb E(\hat{\theta}^r - \theta^r) &= -\frac{\kappa^{r,s}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu})}{2n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right) \\
 &= \frac{1}{n}b_1^r(\theta) + O\left(\frac{1}{n^{\frac{3}{2}}}\right).
-\end{align*}
-$$
+\end{aligned}
+\end{equation*}
 
 ## Case study
 
@@ -114,36 +118,42 @@ legend("topleft", legend = c("True b1", "Empirical mean"),
 ```
 
 
-## Firth's method
+## Firth's method for bias reduction
 
-- Reduce the bias by using an adjusted score function.
+- Reduce the bias by using an adjusted score function
 
-\[U^*(\theta) = U(\theta) + A(\theta), A: \Omega \to \mathbb R^p\]
+\[U^*(\theta) = U(\theta) + A(\theta)\]  
 
-- Root is \(\theta^*\).
+\[A: \Omega \to \mathbb R^p\]  
 
-## Firth's method
+- Root is \(\theta^*\)
+
+## Firth's method for bias reduction
 
 - One can derive the bias of \(\theta^*\) when estimating \(\theta\)
 
-\begin{align*}
-\mathbb E((\theta^*)^r - \theta^r) &= -\frac{\kappa^{r,s}(\frac{1}{2}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu}) + \mathbb E  A^s(\theta))}{n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right) \\
-&= \frac{b_1^r(\theta) + \kappa^{r,s}\mathbb E A^s(\theta)}{n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right).
-\end{align*}
+\begin{equation*}
+\begin{aligned}
+\mathbb E(\hat{\theta}^r - \theta^r) &= -\frac{\kappa^{r,s}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu})}{2n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right) \\
+&= \frac{1}{n}b_1^r(\theta) + O\left(\frac{1}{n^{\frac{3}{2}}}\right).
+\end{aligned}
+\end{equation*}
 
-## Firth's method
+## Firth's method for bias reduction
 
 - Suppose that:
 
-\begin{align*}
-&b_1^r(\theta) + \kappa^{r,s}\mathbb E A^s(\theta) + O\left(\frac{1}{\sqrt{n}}\right) = 0 \\
-&\Leftrightarrow \mathbb E A^r(\theta) = -\kappa_{r,s}b_1^s(\theta) + O\left(\frac{1}{\sqrt{n}}\right) \\
-&\Leftrightarrow \mathbb E A(\theta) = -\frac{1}{n}\mathcal I(\theta)b_1(\theta) + O\left(\frac{1}{\sqrt{n}}\right)
-\end{align*}
+\begin{equation*}
+\begin{aligned}
+&b_1^r(\theta) + \kappa^{r,s}\mathbb E[A^s(\theta)] + O\left(\frac{1}{\sqrt{n}}\right) = 0 \\
+&\Leftrightarrow \mathbb E[A^r(\theta)] = -\kappa_{r,s}b_1^s(\theta) + O\left(\frac{1}{\sqrt{n}}\right) \\
+&\Leftrightarrow \mathbb E[A(\theta)] = -\frac{1}{n}\mathcal I(\theta)b_1(\theta) + O\left(\frac{1}{\sqrt{n}}\right)
+\end{aligned}
+\end{equation*}
 
 - Then the first term of the bias is gone.
 
-## Firth's method
+## Firth's method for bias reduction
 
 - Firth (1993) suggests
 
@@ -155,21 +165,21 @@ or
 
 - If the model uses an exponential family and \(\theta\) is the canonical parameter, then \(A^{(O)} = A^{(E)}\).
 
-## Basic example
+## Example - exponential distribution
 
 Let \(Y_1,...,Y_n \sim Exp(\lambda)\). Use Firth's method to reduce the bias of the MLE of \(\lambda\).
 
 - We have \(l(\lambda) = n\log \lambda - \lambda\sum_{i=1}^n Y_i\), so:
 \[U(\lambda) = \frac{n}{\lambda} - \sum_{i=1}^n Y_i.\]
 
-- We can compute \(A^{(O)}(\lambda) = A^{(E)}(\lambda) = -\frac{1}{\lambda}\) (see work on board).
+- We can compute \(A^{(O)}(\lambda) = A^{(E)}(\lambda) = -\frac{1}{\lambda}\).
 
 - Then
 \[U^*(\lambda) = \frac{n-1}{\lambda} - \sum_{i=1}^n Y_i\]
 and
 \[\lambda^* = \frac{n-1}{\sum_{i=1}^n Y_i}.\]
 
-## Basic example
+## Example - exponential distribution
 
 ```{r}
 set.seed(20230328)
@@ -194,7 +204,8 @@ abline(v=mean(firth), col = "blue", lwd = 2)
 abline(v=lambda, col = "red", lwd = 2)
 legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
 ```
-## Application: Firth's method in logistic regression
+
+## Application - Firth's method in logistic regression
 
 First, let's generate some data based on the following distributions:  
 
@@ -248,3 +259,9 @@ Section 2.3 proposes an algorithm to solve Firth's modified score equations:
 
 $\beta^{(j+1)} \leftarrow \beta^{(j)} + \{ i_{\beta \beta}^{(j)}\}^{-1} s_\beta^{(j)} - b_\beta^{(j)}$  
 $\phi^{(j+1)} \leftarrow \phi^{(j)} + \{ i_{\phi \phi}^{(j)}\}^{-1} s_\phi^{(j)} - b_\phi^{(j)}$
+
+## Conclusion
+
+...
+
+# Questions?
