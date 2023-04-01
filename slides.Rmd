@@ -153,6 +153,7 @@ and
 ## Basic example
 
 ```{r}
+# show how bias of both estimators vary with sample size
 set.seed(20230328)
 
 trials <- 10000
@@ -174,5 +175,168 @@ abline(v=mean(mle), col = "green", lwd = 2)
 abline(v=mean(firth), col = "blue", lwd = 2)
 abline(v=lambda, col = "red", lwd = 2)
 legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
+```
+
+## Basic example
+
+```{r}
+# show how bias of both estimators vary with sample size
+set.seed(20230328)
+
+trials <- 10000
+n <- 100
+lambda <- 7
+
+mle <- double(trials)
+firth <- double(trials)
+
+for (i in 1:trials) {
+  y <- rexp(n, lambda)
+  mle[i] <- 1/mean(y)
+  firth[i] <- (n-1)/sum(y)
+}
+
+hist(firth, col = rgb(red = 0, green = 0, blue = 1, alpha = 0.5))
+hist(mle, add = T, col = rgb(red = 0, green = 1, blue = 0, alpha = 0.5))
+abline(v=mean(mle), col = "green", lwd = 2)
+abline(v=mean(firth), col = "blue", lwd = 2)
+abline(v=lambda, col = "red", lwd = 2)
+legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+# The next two chunks don't work
+
+# gamma.firth.step <- function (beta.old, phi.old, pred, resp) {
+#   p <- ncol(pred)
+#   n <- nrow(pred)
+#   lin.pred <- pred %*% beta.old
+#   fitted.mean <- exp(lin.pred)
+#   v <- fitted.mean^2
+#   d <- d.prime <- fitted.mean
+#   w <- d^2 / v
+#   W <- diag(as.numeric(w))
+#   work.resp <- lin.pred + (resp - fitted.mean)/d
+#   hat <- pred %*% solve(t(pred) %*% W %*% pred) %*% t(pred) %*% W
+#   print(h)
+#   xi <- (h*d.prime)/(2*d*w)
+#   
+#   beta.new <- solve(t(pred) %*% W %*% pred) %*% t(pred) %*% W %*% (lin.pred + phi.old * xi)
+#   
+#   a.1 <- function(u) 2*(-psigamma(-u,0) + log(-u) + 1)
+#   a.2 <- function(u) 2*(psigamma(-u,1) + 1/u)
+#   a.3 <- function(u) 2*(-psigamma(-u,2) - 1/u^2)
+#   
+#   theta <- -1/fitted.mean
+#   b <- -log(-theta)
+#   c1 <- -log(y)
+#   a.1.eval <- a.1(-1/phi.old)
+#   q <- -2*(resp*theta - b - c1)
+#   rho <- a.1.eval
+#   a.2.eval <- a.2(-1/phi.old)
+#   a.3.eval <- a.3(-1/phi.old)
+#   
+#   phi.new <- phi.old * (1 + phi.old * sum(q-rho) / (n*a.2.eval) + phi.old * n*a.3.eval / (n*a.2.eval)^2 + phi.old^2 * (p-2) / (n*a.2.eval))
+#   
+#   return(list(beta = beta.new, phi = phi.new))
+# }
+# 
+# gamma.firth <- function(pred, resp, tol, max.iter) {
+#   n <- nrow(pred)
+#   p <- ncol(pred)
+#   for (i in 1:max.iter) {
+#     if (i==1) {
+#       beta.old <- solve(t(pred) %*% pred) %*% t(pred) %*% log(resp)
+#       fitted.mean <- exp(pred %*% beta.old)
+#       phi.old <- sum((y - fitted.mean)^2/(fitted.mean)^2)/(n-p)
+#     } else {
+#       new <- gamma.firth.step(beta.old, phi.old, pred, resp)
+#       beta.new <- new$beta
+#       phi.new <- new$phi
+#       
+#       print(beta.new)
+#       print(phi.new)
+#       
+#       if (abs(beta.new - beta.old) <= tol & abs(phi.new - phi.old) <= tol)
+#         return(list(beta = beta.new, phi = phi.new, success = 1))
+#       else {
+#         beta.old <- beta.new
+#         phi.old <- phi.new
+#       }
+#     }
+#   }
+#   
+#   return(list(beta = beta.new, phi = phi.new, success = 0))
+# }
+```
+
+```{r, warning = FALSE}
+# set.seed(20230320)
+# 
+# b0 <- 8
+# b1 <- 5
+# n <- 10
+# x <- runif(n, -10, 10)
+# 
+# trials <- 10000
+# # First row is b0, second row is b1, third row is dispersion (1/nu)
+# estims <- matrix(double(trials*3), nrow = 3)
+# success <- double(trials)
+# 
+# for (i in 1:trials) {
+#   y <- rexp(n, rate = exp(-(b0 + b1*x)))
+#   
+#   param.estim <- gamma.firth(cbind(rep(1,n),x), y, 1e-8, 10000)
+#   
+#   estims[c(1,2),i] <- param.estim$beta
+#   estims[3,i] <- param.estim$phi
+#   success[i] <- param.estim$success
+# }
 ```
 
