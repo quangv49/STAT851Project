@@ -56,7 +56,12 @@ Common method for estimating parameters in many statistical models, including li
 
 - The first term in the bias of \(\hat\theta\) has been studied.
 
-\[\mathbb E(\hat{\theta}^r - \theta^r) = -\frac{\kappa^{r,s}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu})}{2n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right) = \frac{1}{n}b_1^r(\theta) + O\left(\frac{1}{n^{\frac{3}{2}}}\right).\]
+$$
+\begin{align*}
+\mathbb E(\hat{\theta}^r - \theta^r) &= -\frac{\kappa^{r,s}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu})}{2n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right) \\
+&= \frac{1}{n}b_1^r(\theta) + O\left(\frac{1}{n^{\frac{3}{2}}}\right).
+\end{align*}
+$$
 
 ## Motivation
 
