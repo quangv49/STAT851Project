@@ -19,6 +19,18 @@ knitr::opts_chunk$set(echo = FALSE)
 \item Real data example
 \end{enumerate}
 
+## Refresher
+
+$\text{Bias}(\hat \theta) = \mathbb{E}[\hat \theta] - \theta$  
+
+Estimator is biased if it consistently overestimates or underestimates the parameter it is trying to estimate.  
+
+&nbsp;
+
+$\hat \theta_{MLE} = \text{arg max} L(\theta ; y_1,...,y_n)$  
+
+Common method for estimating parameters in many statistical models, including linear regression, logistic regression, and many others.
+
 ## Motivation
 
 - MLEs are consistent and asymptotically unbiased, but there is still a shrinking bias term.
