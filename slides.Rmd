@@ -175,4 +175,41 @@ abline(v=mean(firth), col = "blue", lwd = 2)
 abline(v=lambda, col = "red", lwd = 2)
 legend("topright", legend = c("Firth", "MLE"), col = c("blue", "green"), pch = c(15,15))
 ```
+## Application: Firth's method in logistic regression
 
+First, let's generate some data based on the following distributions:  
+
+&nbsp;
+
+$\beta = (0.5, -0.01, 0.1)$  
+$\eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2$  
+
+&nbsp;
+
+$X_1 \sim U(1, 150)$  
+$X_2 \sim U(0.5, 100)$  
+$Y \sim Binom(n, \frac{\exp(\eta)}{1+\exp(\eta)})$
+
+## Application (cont'd)
+
+Now we fit a binomial GLM with logit link, as well as a logistic regression model using the R package **logistf**.  
+
+&nbsp;
+
+`glm_model <- glm(Y ~ X1 + X2, family = binomial(link = "logit"), data = sim_data)`  
+
+&nbsp;
+
+`firth_model <- logistf(Y ~ X1 + X2, data = sim_data)`  
+
+&nbsp;
+
+We then store the coefficients for each model, and repeat this experiment *n* times. 
+
+## Application (cont'd) *n = 25*
+
+![Figure 1](Rplot01.png)
+
+## Application (cont'd) *n = 100*
+
+![Figure 2](Rplot02.png)
