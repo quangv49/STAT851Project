@@ -1,8 +1,9 @@
 ---
 title: "STAT 851 Project - Firth's method for bias reduction of MLEs"
 author: "Quang Vuong, Nadia Enhaili"
-date: "26/03/2023"
+date: "4 Apr 2023"
 output: beamer_presentation
+bibliography: ref.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -294,6 +295,12 @@ It can be readily implemented for GLMs and there exist packages which do this.
 Bias is not the only consideration when evaluating estimators.
 
 # Questions?
+
+## References
+
+---
+nocite: '@*'
+---
 
 
 
