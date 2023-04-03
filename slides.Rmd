@@ -141,8 +141,8 @@ One can derive the bias of \(\theta^*\) when estimating \(\theta\):
 
 \begin{equation*}
 \begin{aligned}
-\mathbb E(\hat{\theta}^r - \theta^r) &= -\frac{\kappa^{r,s}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu})}{2n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right) \\
-&= \frac{1}{n}b_1^r(\theta) + O\left(\frac{1}{n^{\frac{3}{2}}}\right).
+\mathbb E((\theta^*)^r - \theta^r) &= \frac{\kappa^{r,s}\left(-\frac{1}{2}\kappa^{t,u}(\kappa_{s,t,u} + \kappa_{s,tu}) + \mathbb E A_s(\theta)\right)}{n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right) \\
+&= \frac{b_1^r(\theta) + \kappa^{r,s}\mathbb E A_s(\theta)}{n} + O\left(\frac{1}{n^{\frac{3}{2}}}\right).
 \end{aligned}
 \end{equation*}
 
@@ -152,8 +152,8 @@ Suppose that:
 
 \begin{equation*}
 \begin{aligned}
-&b_1^r(\theta) + \kappa^{r,s}\mathbb E[A^s(\theta)] + O\left(\frac{1}{\sqrt{n}}\right) = 0 \\
-&\Leftrightarrow \mathbb E[A^r(\theta)] = -\kappa_{r,s}b_1^s(\theta) + O\left(\frac{1}{\sqrt{n}}\right) \\
+&b_1^r(\theta) + \kappa^{r,s}\mathbb E A_s(\theta) + O\left(\frac{1}{\sqrt{n}}\right) = 0 \\
+&\Leftrightarrow \mathbb E[A_r(\theta)] = -\kappa_{r,s}b_1^s(\theta) + O\left(\frac{1}{\sqrt{n}}\right) \\
 &\Leftrightarrow \mathbb E[A(\theta)] = -\frac{1}{n}\mathcal I(\theta)b_1(\theta) + O\left(\frac{1}{\sqrt{n}}\right)
 \end{aligned}
 \end{equation*}
@@ -258,11 +258,11 @@ Now we fit a binomial GLM with logit link, as well as a logistic regression mode
 
 We then store the coefficients for each model, and repeat this experiment *n* times. 
 
-## Application (cont'd) *n = 25*
+## Application (cont'd) *n = 25, 1000 iterations*
 
 ![Figure 1](Rplot01.png)
 
-## Application (cont'd) *n = 100*
+## Application (cont'd) *n = 100, 1000 iterations*
 
 ![Figure 2](Rplot02.png)
 
